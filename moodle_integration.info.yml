@@ -1,0 +1,7 @@
+name: Moodle Intergartion
+type: module
+description: 'Modules Provides Easy way to integarte with Druapl'
+package: 'Moodle Integration'
+version: 8.x-1.x
+core: 8.x
+configure: moodle_integration.settings
