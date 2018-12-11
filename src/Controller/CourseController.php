@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\moodle_integration\Controller;
+namespace Drupal\drupal_moodle_integration\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\moodle_integration\Utility;
+use Drupal\drupal_moodle_integration\Utility;
 
 /**
  * Defines CourseController class.
@@ -17,7 +17,7 @@ class CourseController extends ControllerBase {
    *   Return markup array.
    */
   public function content() {
-    $service = \Drupal::service('moodle_integration.course_services');
+    $service = \Drupal::service('drupal_moodle_integration.course_services');
     $service->getServiceData();
         return [
         	'#theme' => 'moodle_course',

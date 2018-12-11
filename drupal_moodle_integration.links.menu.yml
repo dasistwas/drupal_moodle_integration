@@ -1,0 +1,6 @@
+drupal_moodle_integration.admin:
+  title: 'Moodle settings'
+  description: 'Moolde Settings Form'
+  parent: system.admin_config_development
+  route_name: drupal_moodle_integration.settings
+  weight: 100

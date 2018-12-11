@@ -1,0 +1,8 @@
+services:
+  drupal_moodle_integration.course_services:
+    class: Drupal\drupal_moodle_integration\Services\CourseService
+    arguments: []
+
+  drupal_moodle_integration.user_services:
+    class: Drupal\drupal_moodle_integration\Services\UserService
+    arguments: []

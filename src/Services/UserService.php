@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\moodle_integration\Services;
+namespace Drupal\drupal_moodle_integration\Services;
 
-use Drupal\moodle_integration\Utility;
+use Drupal\drupal_moodle_integration\Utility;
 use \Drupal\Core\Database\Connection;
 
 /**

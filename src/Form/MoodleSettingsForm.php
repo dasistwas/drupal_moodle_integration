@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\moodle_integration\Form;
+namespace Drupal\drupal_moodle_integration\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;

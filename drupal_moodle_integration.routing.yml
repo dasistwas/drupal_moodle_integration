@@ -1,0 +1,21 @@
+drupal_moodle_integration.settings:
+  path: '/admin/structure/example/settings'
+  defaults:
+    _form: '\Drupal\drupal_moodle_integration\Form\MoodleSettingsForm'
+    _title: 'Moodle Configuration Form'
+  requirements:
+    _permission: 'administer site configuration'
+drupal_moodle_integration_course.controller:
+  path: '/moodle/course'
+  defaults:
+    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::content'
+    _title: 'Moodle Courses List'
+  requirements:
+    _permission: 'access content'
+drupal_moodle_integration_course_activities.controller:
+  path: '/moodle/course/activities'
+  defaults:
+    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::courseActivities'
+    _title: 'Moodle Courses Activities'
+  requirements:
+    _permission: 'access content'
