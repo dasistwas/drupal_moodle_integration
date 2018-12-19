@@ -1,10 +1,8 @@
 <?php
 
 namespace Drupal\drupal_moodle_integration\Services;
-
 use Drupal\drupal_moodle_integration\Utility;
 use \Drupal\Core\Database\Connection;
-
 /**
  * Class UserService.
  */
@@ -40,8 +38,6 @@ class UserService {
     $response = file_get_contents($url);
     $newusers = json_decode($response);
   }
-
-
 
 }
 

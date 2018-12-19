@@ -4,6 +4,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Url;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
 /**
  * Implements hook_theme.Set custom theme for modules
  */
@@ -11,6 +12,10 @@ use Drupal\Core\Url;
 
 function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
     return array(
+      'moodle_course_list' => array(
+        'variables' => array('course_list' => array(),'moodle_user_id'=> ""),
+        'template' => 'course_list',
+          ),
         'moodle_course' => array(
             'variables' => array('course' => array(),'moodle_user_id'=> ""),
             'template' => 'course',
@@ -33,6 +38,23 @@ function drupal_moodle_integration_install() {
       'label' => 'above',
       'settings' => ['link_to_entity' => 'false'],
     ])->save();
+
+    $items = array(
+      'moodle/course/list' => 'Moodle Courses List',
+      'moodle/course' => 'Moodle User Assigned Courses',
+    );
+
+    foreach($items as $nid => $title) {
+
+       $menu_link = MenuLinkContent::create([
+        'title' => $title,
+        'link' => ['uri' => 'internal:/' . $nid],
+        'menu_name' => 'main',
+        'expanded' => TRUE,
+      ]);
+      $menu_link->save();
+
+    }
 }
 /**
  * Implements hook_form_FORM_ID_alter().

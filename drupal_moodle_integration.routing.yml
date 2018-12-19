@@ -8,7 +8,7 @@ drupal_moodle_integration.settings:
 drupal_moodle_integration_course.controller:
   path: '/moodle/course'
   defaults:
-    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::content'
+    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::userEnrolledCourse'
     _title: 'Courses List'
   requirements:
     _permission: 'access content'
@@ -24,5 +24,12 @@ drupal_moodle_integration_course_unenrol.controller:
   defaults:
     _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::courseUnenrol'
     _title: 'Activities'
+  requirements:
+    _permission: 'access content'
+drupal_moodle_integration_course_list.controller:
+  path: '/moodle/course/list'
+  defaults:
+    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::coursesList'
+    _title: 'Courses List'
   requirements:
     _permission: 'access content'

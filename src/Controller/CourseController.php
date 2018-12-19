@@ -16,13 +16,30 @@ class CourseController extends ControllerBase {
    * @return array
    *   Return markup array.
    */
-  public function content() {
+
+  public function coursesList() {
+    global $base_url;
     $service = \Drupal::service('drupal_moodle_integration.course_services');
     $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
-    $moodle_id= $user->field_moodle_user_id->value;
+    $moodle_id = $user->field_moodle_user_id->value;
+    return [
+      '#theme' => 'moodle_course_list',
+      '#course_list' =>  $service->getCoursesList(),
+      '#moodle_user_id' => $moodle_id,
+      '#attached' => array(
+        'library' => array(
+          'drupal_moodle_integration/drupal_moodle_integration',
+        )
+      )
+      ];
+  }
+  public function userEnrolledCourse() {
+    $service = \Drupal::service('drupal_moodle_integration.course_services');
+    $user = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
+    $moodle_id = $user->field_moodle_user_id->value;
     return [
       '#theme' => 'moodle_course',
-      '#course' =>  $service->getServiceData(),
+      '#course' =>  $service->userAssignedcourses(),
       '#moodle_user_id' => $moodle_id,
       '#attached' => array(
         'library' => array(
@@ -30,7 +47,6 @@ class CourseController extends ControllerBase {
         )
       )
     ];
-
   }
 
   public function courseGetActivities() {
@@ -39,8 +55,7 @@ class CourseController extends ControllerBase {
     $service = \Drupal::service('drupal_moodle_integration.course_services');
     return [
        	'#theme' => 'moodle_course_activity',
-        '#course_activity' => $service->getActivities($arg[4]),
-    ];
+        '#course_activity' => $service->getActivities($arg[4]),    ];
 
   }
 
