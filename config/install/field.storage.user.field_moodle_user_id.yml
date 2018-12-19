@@ -4,6 +4,10 @@ dependencies:
   module:
     - text
     - user
+    - drupal_moodle_integration
+  enforced:
+    module:
+      - drupal_moodle_integration
 id: user.field_moodle_user_id
 field_name: field_moodle_user_id
 entity_type: user

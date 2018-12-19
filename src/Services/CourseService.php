@@ -53,21 +53,21 @@ class CourseService {
     return $newusers;
   }
 
-  function courseEnrol($users) {
-    $config =  \Drupal::config('moodle.settings');
-    $baseurl = $config->get('url').'/webservice/rest/server.php?';
-    $params = array(
-      'wstoken' => 'a5f4f1801d6268ad29b11ffcb51942d9',
-      'wsfunction' => 'enrol_manual_enrol_users',
-      'moodlewsrestformat' => 'json',
-    );
-    $params['enrolments'][0]['roleid']= 5;
-    $params['enrolments'][0]['userid']= 20;
-    $params['enrolments'][0]['courseid']= 2;
-    $url = $baseurl . http_build_query($params);
-    $response = file_get_contents($url);
-    $newusers = json_decode($response);
-  }
+  // function courseEnrol($users) {
+  //   $config =  \Drupal::config('moodle.settings');
+  //   $baseurl = $config->get('url').'/webservice/rest/server.php?';
+  //   $params = array(
+  //     'wstoken' => 'a5f4f1801d6268ad29b11ffcb51942d9',
+  //     'wsfunction' => 'enrol_manual_enrol_users',
+  //     'moodlewsrestformat' => 'json',
+  //   );
+  //   $params['enrolments'][0]['roleid']= 5;
+  //   $params['enrolments'][0]['userid']= 20;
+  //   $params['enrolments'][0]['courseid']= 2;
+  //   $url = $baseurl . http_build_query($params);
+  //   $response = file_get_contents($url);
+  //   $newusers = json_decode($response);
+  // }
 
   function courseUnEnrol($userid,$courseid) {
     $config =  \Drupal::config('moodle.settings');
