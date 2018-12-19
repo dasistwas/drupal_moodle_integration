@@ -1,0 +1,4 @@
+drupal_moodle_integration:
+    version: 1.x
+    js:
+      js/drupal_moodle_integration.js: {}

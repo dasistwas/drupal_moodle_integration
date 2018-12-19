@@ -12,26 +12,26 @@ use \Drupal\Core\Database\Connection;
 class UserService {
 
   function moodleCreateUser($users) {
-    // $baseurl = 'http://localhost/moodle/webservice/rest/server.php?';
-    // //print_r($users);die;
-    // $params = array(
-    // 'wstoken' => 'a5f4f1801d6268ad29b11ffcb51942d9',
-    // 'wsfunction' => 'core_user_create_users',
-    // 'moodlewsrestformat' => 'json',
-    // 'users' => $users,
-    // );
-
-    // $url = $baseurl . http_build_query($params);
-    // $response = file_get_contents($url);
-    // $newusers = json_decode($response);
-
-    // return $newusers[0]->id;
-
+    $config =  \Drupal::config('moodle.settings');
+    $baseurl = $config->get('url').'/webservice/rest/server.php?';
+    $params = array(
+    'wstoken' => $config->get('wstoken'),
+    'wsfunction' => 'core_user_create_users',
+    'moodlewsrestformat' => 'json',
+    'users' => $users,
+    );
+    $url = $baseurl . http_build_query($params);
+    $response = file_get_contents($url);
+    $newusers = json_decode($response);
+   // print_r($newusers);die;
+    return $newusers[0]->id;
   }
 
   function moodleUpdateUser($users) {
+    $config =  \Drupal::config('moodle.settings');
+    $baseurl = $config->get('url').'/webservice/rest/server.php?';
     $params = array(
-      'wstoken' => 'a5f4f1801d6268ad29b11ffcb51942d9',
+      'wstoken' => $config->get('wstoken'),
       'wsfunction' => 'core_user_update_users',
       'moodlewsrestformat' => 'json',
       'users' => $users,
@@ -40,6 +40,9 @@ class UserService {
     $response = file_get_contents($url);
     $newusers = json_decode($response);
   }
+
+
+
 }
 
 

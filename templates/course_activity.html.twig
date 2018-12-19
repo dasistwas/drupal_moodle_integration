@@ -1,11 +1,10 @@
-{% for key, value in course %}
+{% for key, value in course_activity %}
 <div class="views-row">
    <article data-history-node-id="5" data-quickedit-entity-id="node/5" role="article" class="contextual-region node node--type-article node--promoted node--view-mode-teaser clearfix" about="/drupal/node/5" typeof="schema:Article" data-quickedit-entity-instance-id="0">
       <header>
-         <h1 class="node__title">
-            <a href="course/activities/{{ value.id }} " rel="bookmark"><span property="schema:name" data-quickedit-field-id="node/5/title/en/teaser" class="field field--name-title field--type-string field--label-hidden quickedit-field">{{ value.fullname}}</span>
-            </a>
-         </h1>
+         <h2 class="node__title">
+           {{ value.name}}
+         </h2>
          <div data-contextual-id="node:node=5:changed=1543225646&amp;langcode=en" data-contextual-token="lsC3J07oyJfBYtjVT269ybmRiL2kzXLqXg2MtUZaWOg" class="contextual" role="form" style="top: 32px;">
             <button class="trigger focusable visually-hidden" type="button" aria-pressed="false">Open Taxonomy Based Visibility Category Demo1 configuration options</button>
             <ul class="contextual-links" hidden="">
@@ -22,19 +21,31 @@
       <div class="node__content clearfix">
          <div class="node__links">
             <ul class="links inline">
-               <li class="node-readmore"><a href="/drupal/node/5" rel="tag" moodle-user-id={{ moodle_user_id }} course-id={{ value.id}} id="moodle_enrol" title="Taxonomy Based Visibility Category Demo1" hreflang="en">Enroll<span class="visually-hidden"> about Taxonomy Based Visibility Category Demo1</span></a></li>
+               <li class="node-readmore"><a href="/drupal/node/5" rel="tag" title="Taxonomy Based Visibility Category Demo1" hreflang="en"><span class="visually-hidden"> about Taxonomy Based Visibility Category Demo1</span></a></li>
                <li class="comment-add"></li>
             </ul>
          </div>
          <div data-quickedit-field-id="node/5/field_description/en/teaser" class="clearfix text-formatted field field--name-field-description field--type-text-with-summary field--label-above quickedit-field">
-            <div class="field__label">Description</div>
+            <div class="field__label">Summary</div>
             <div class="field__items">
                <div class="field__item">
-                  <p>{{ value.summary |raw}}</p>
+                  <p>{{ value.summary | raw}}</p>
                </div>
             </div>
          </div>
       </div>
-   </article>
+      {% for key, modules in value.modules %}
+      <details  style="margin: 37px;" data-drupal-selector="edit-moodle" id="edit-moodle" class="js-form-wrapper form-wrapper seven-details">
+         <summary role="button" aria-controls="edit-moodle" aria-expanded="false" aria-pressed="false" class="seven-details__summary">Activities</summary>
+         <div class="seven-details__wrapper details-wrapper">
+            <div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-url form-item-url">
+               <a href="{{ modules.url }}"  <label for="edit-url">{{ modules.name }}</label></a>
+            </div>
+         </div>
+</div>
+</details>
+{% endfor %}
+</article>
 </div>
 {% endfor %}
+

@@ -3,7 +3,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
+use Drupal\Core\Url;
 /**
  * Implements hook_theme.Set custom theme for modules
  */
@@ -12,9 +12,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
     return array(
         'moodle_course' => array(
-            'variables' => array('course' => array(),'test_var' =>NULL,'test1' =>NULL),
+            'variables' => array('course' => array(),'moodle_user_id'=> ""),
             'template' => 'course',
         ),
+        'moodle_course_activity' => array(
+          'variables' => array('course_activity' => array()),
+          'template' => 'course_activity',
+      ),
     );
 }
 
@@ -30,10 +34,49 @@ function drupal_moodle_integration_install() {
       'settings' => ['link_to_entity' => 'false'],
     ])->save();
 }
-function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterface $entity) {
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function drupal_moodle_integration_form_user_login_form_alter(&$form, FormStateInterface $form_state) {
+  $form['#submit'][] = 'drupal_moodle_integration_user_login_submit';
+}
+
+/**
+ * Form submission handler for user_login_form().
+ *
+ * Redirects the user to the dashboard after logging in.
+ */
+function drupal_moodle_integration_user_login_submit(&$form, FormStateInterface $form_state) {
+  $url = Url::fromRoute('drupal_moodle_integration_course.controller');
+
+  // Check if a destination was set, probably on an exception controller.
+  // @see \Drupal\user\Form\UserLoginForm::submitForm()
+  $request = \Drupal::service('request_stack')->getCurrentRequest();
+  if (!$request->request->has('destination')) {
+    $form_state->setRedirectUrl($url);
+  }
+}
+function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterface $entity) {
   if($entity->bundle()=='user') {
     $users = array(array(
-      'id' => $entity->get('field_test')->getValue()[0]['value'] ,
+      'username' => $entity->get('name')->getValue()[0]['value'] ,
+      'password' =>  $_POST['pass']['pass1'],
+      'firstname'=> $entity->get('name')->getValue()[0]['value'],
+      'lastname' => $entity->get('name')->getValue()[0]['value'],
+      'email'    => $entity->get('mail')->getValue()[0]['value'],
+      ));
+      $service = \Drupal::service('drupal_moodle_integration.user_services');
+      $moodle_id= $service->moodleCreateUser($users);
+      $entity->set('field_moodle_user_id', $moodle_id);
+      $entity->save();
+  }
+}
+
+function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterface $entity) {
+
+  if($entity->bundle()=='user') {
+    $users = array(array(
+      'id' => $entity->get('field_moodle_user_id')->getValue()[0]['value'] ,
       'username' => $entity->get('name')->getValue()[0]['value'] ,
       'firstname'=> $entity->get('name')->getValue()[0]['value'],
       'lastname' => $entity->get('name')->getValue()[0]['value'],
@@ -46,54 +89,54 @@ function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterfac
 }
 
 
-  function drupal_moodle_integration_form_user_login_form_alter(&$form, FormStateInterface $form_state) {
-    $form['#validate'][] = '_drupal_moodle_integration_validate';
-  }
+  // function drupal_moodle_integration_form_user_login_form_alter(&$form, FormStateInterface $form_state) {
+  //   $form['#validate'][] = '_drupal_moodle_integration_validate';
+  // }
 
-  function _drupal_moodle_integration_validate(&$form, FormStateInterface &$form_state) {
-    $email = $form_state->getValue('pass');
-    if (isset($email) && 2 < strlen($email)) {
-      $config =  \Drupal::config('moodle.settings');
-      $baseurl =  'http://'.$config->get('url').'/login/token.php?username='.$form_state->getValue('name').'&password='. $form_state->getValue('pass').'&service=moodle_mobile_app';
+  // function _drupal_moodle_integration_validate(&$form, FormStateInterface &$form_state) {
+  //   $email = $form_state->getValue('pass');
+  //   if (isset($email) && 2 < strlen($email)) {
+  //     $config =  \Drupal::config('moodle.settings');
+  //     $baseurl =  'http://'.$config->get('url').'/login/token.php?username='.$form_state->getValue('name').'&password='. $form_state->getValue('pass').'&service=moodle_mobile_app';
 
-      $response = file_get_contents($baseurl);
-      $response_token = json_decode($response);
-      $ids = \Drupal::entityQuery('user')
-      ->condition('name', $form_state->getValue('name'))
-      ->range(0, 1)
-      ->execute();
+  //     $response = file_get_contents($baseurl);
+  //     $response_token = json_decode($response);
+  //     $ids = \Drupal::entityQuery('user')
+  //     ->condition('name', $form_state->getValue('name'))
+  //     ->range(0, 1)
+  //     ->execute();
 
-      if($response_token->token!="" && empty($ids)){
-        $baseurl =  $config->get('url').'/webservice/rest/server.php?wstoken='.$config->get('wstoken').'&wsfunction=core_user_get_users_by_field&field=username&values[0]='. $form_state->getValue('name').'&moodlewsrestformat=json';
-        $response = file_get_contents($baseurl);
-        $response_user_datails = json_decode($response);
-        $user = User::create();
-        $user->setPassword($form_state->getValue('pass'));
-        $user->enforceIsNew();
-        $user->setEmail($response_user_datails[0]->email);
-        $user->setUsername($form_state->getValue('name'));
-        $language = 'en';
-        $user->set("init", 'email');
-        $user->set("langcode", $language);
-        $user->set("preferred_langcode", $language);
-        $user->set("preferred_admin_langcode", $language);
-        $user->set("field_moodle_user_id", $response_user_datails[0]->id);
-        $user->activate();
-        //Save user
-        $user->save();
-        drupal_set_message("User with uid " . $user->id() . " saved!\n");
-        $uid=$user->id();
-        if(isset($uid)) {
-          $user = User::load($uid);
-          user_login_finalize($user);
-          global $base_url;
-          $user_destination = $base_url.'/moodle/course';
-          $response = new RedirectResponse($user_destination);
-          $response->send();
-          ksm($user);
-        }
-        if (!valid_email_address($email)) {
-        }
-      }
-    }
-  }
+  //     if($response_token->token!="" && empty($ids)){
+  //       $baseurl =  $config->get('url').'/webservice/rest/server.php?wstoken='.$config->get('wstoken').'&wsfunction=core_user_get_users_by_field&field=username&values[0]='. $form_state->getValue('name').'&moodlewsrestformat=json';
+  //       $response = file_get_contents($baseurl);
+  //       $response_user_datails = json_decode($response);
+  //       $user = User::create();
+  //       $user->setPassword($form_state->getValue('pass'));
+  //       $user->enforceIsNew();
+  //       $user->setEmail($response_user_datails[0]->email);
+  //       $user->setUsername($form_state->getValue('name'));
+  //       $language = 'en';
+  //       $user->set("init", 'email');
+  //       $user->set("langcode", $language);
+  //       $user->set("preferred_langcode", $language);
+  //       $user->set("preferred_admin_langcode", $language);
+  //       $user->set("field_moodle_user_id", $response_user_datails[0]->id);
+  //       $user->activate();
+  //       //Save user
+  //       $user->save();
+  //       drupal_set_message("User with uid " . $user->id() . " saved!\n");
+  //       $uid=$user->id();
+  //       if(isset($uid)) {
+  //         $user = User::load($uid);
+  //         user_login_finalize($user);
+  //         global $base_url;
+  //         $user_destination = $base_url.'/moodle/course';
+  //         $response = new RedirectResponse($user_destination);
+  //         $response->send();
+  //         ksm($user);
+  //       }
+  //       if (!valid_email_address($email)) {
+  //       }
+  //     }
+  //   }
+  // }
