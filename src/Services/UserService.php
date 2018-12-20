@@ -9,7 +9,7 @@ namespace Drupal\drupal_moodle_integration\Services;
 class UserService {
 
   function moodleCreateUser($users) {
-    $config =  \Drupal::config('moodle.settings');
+    $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url').'/webservice/rest/server.php?';
     $params = array(
       'wstoken' => $config->get('wstoken'),
@@ -24,7 +24,7 @@ class UserService {
   }
 
   function moodleUpdateUser($users) {
-    $config =  \Drupal::config('moodle.settings');
+    $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url').'/webservice/rest/server.php?';
     $params = array(
       'wstoken' => $config->get('wstoken'),
@@ -38,5 +38,3 @@ class UserService {
   }
 
 }
-
-
