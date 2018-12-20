@@ -32,21 +32,21 @@ class MoodleSettingsForm extends ConfigFormBase {
     $config = $this->config('moodle.settings');
 
    $form['moodle'] = [
-      '#title' => t('Moodle settings'),
+      '#title' => 'Moodle settings',
       '#type' => 'details',
       '#open' => TRUE,
     ];
 
     $form['moodle']['url'] = [
       '#type' => 'textfield',
-      '#title' => t('Moodle Url'),
+      '#title' => 'Moodle Url',
       '#default_value' => $this->config('moodle.settings')->get('url'),
       '#description' => $this->t('Moodle Url'),
     ];
 
     $form['moodle']['wstoken'] = [
       '#type' => 'textfield',
-      '#title' => t('Moodle Token'),
+      '#title' => 'Moodle Token',
       '#default_value' => $this->config('moodle.settings')->get('wstoken'),
       '#description' => $this->t('Moodle Token'),
     ];

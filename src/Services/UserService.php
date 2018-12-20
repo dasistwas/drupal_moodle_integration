@@ -34,7 +34,7 @@ class UserService {
     );
     $url = $baseurl . http_build_query($params);
     $response = file_get_contents($url);
-    $newusers = json_decode($response);
+    json_decode($response);
   }
 
 }
