@@ -1,32 +1,34 @@
 <?php
-
+/**
+ * 
+ */
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 /**
- * Implements hook_theme.Set custom theme for modules
+ * Implements hook_theme().Set custom theme for modules
  */
 
 function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
   return [
     'moodle_course_list' => [
-      'variables' => ['course_list' => [] , 'moodle_user_id'=> ""],
+      'variables' => ['course_list' => [] , 'moodle_user_id' => ""],
       'template' => 'course_list',
     ],
     'moodle_course' => [
-      'variables' => ['course' => [] , 'moodle_user_id'=> ""],
+      'variables' => ['course' => [] , 'moodle_user_id' => ""],
       'template' => 'course',
     ],
     'moodle_course_activity' => [
-      'variables' => ['course_activity' => [] ],
+      'variables' => ['course_activity' => []],
       'template' => 'course_activity',
     ],
   ];
 }
 
 /**
- * Implements hook_user_insert.Update existing users in moodle
+ * Implements hook_user_insert().Update existing users in moodle.
  */
 function drupal_moodle_integration_install() {
   \Drupal::entityTypeManager()
@@ -36,20 +38,21 @@ function drupal_moodle_integration_install() {
       'label' => 'above',
       'settings' => ['link_to_entity' => 'false'],
     ])->save();
-  $items = array(
+  $items = [
     'moodle/course/list' => 'Moodle Courses List',
     'moodle/course' => 'Moodle User Assigned Courses',
-  );
-  foreach($items as $nid => $title) {
+  ];
+  foreach ($items as $nid => $title) {
     $menu_link = MenuLinkContent::create([
-    'title' => $title,
-    'link' => ['uri' => 'internal:/' . $nid],
-    'menu_name' => 'main',
-    'expanded' => TRUE,
+      'title' => $title,
+      'link' => ['uri' => 'internal:/' . $nid],
+      'menu_name' => 'main',
+      'expanded' => TRUE,
     ]);
     $menu_link->save();
   }
 }
+
 /**
  * Implements hook_form_FORM_ID_alter().
  */
@@ -58,7 +61,7 @@ function drupal_moodle_integration_form_user_login_form_alter(&$form, FormStateI
 }
 
 /**
- * After Login Redirect
+ * After Login Redirect.
  */
 function drupal_moodle_integration_user_login_submit(&$form, FormStateInterface $form_state) {
   $url = Url::fromRoute('drupal_moodle_integration_course.controller');
@@ -69,26 +72,26 @@ function drupal_moodle_integration_user_login_submit(&$form, FormStateInterface 
 }
 
 /**
- * Insert User in moodle
+ * Insert User in moodle.
  */
 function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterface $entity) {
   if ($entity->bundle() == 'user') {
     $users[] = [
       'username' => $entity->get('name')->getValue()[0]['value'] ,
       'password' => $_POST['pass']['pass1'],
-      'firstname'=> $entity->get('name')->getValue()[0]['value'],
+      'firstname' => $entity->get('name')->getValue()[0]['value'],
       'lastname' => $entity->get('name')->getValue()[0]['value'],
       'email'    => $entity->get('mail')->getValue()[0]['value'],
     ];
     $service = \Drupal::service('drupal_moodle_integration.user_services');
-    $moodle_id= $service->moodleCreateUser($users);
+    $moodle_id = $service->moodleCreateUser($users);
     $entity->set('field_moodle_user_id', $moodle_id);
     $entity->save();
   }
 }
 
 /**
- * Update User in moodle
+ * Update User in moodle.
  */
 function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterface $entity) {
   if ($entity->bundle() == 'user') {
@@ -100,8 +103,6 @@ function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterfac
       'email'    => $entity->get('mail')->getValue()[0]['value'],
     ];
     $service = \Drupal::service('drupal_moodle_integration.user_services');
-    $moodle_id= $service->moodleUpdateUser($users);
+    $moodle_id = $service->moodleUpdateUser($users);
   }
 }
-
-
