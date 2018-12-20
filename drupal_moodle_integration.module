@@ -1,8 +1,6 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\user\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 /**
@@ -11,20 +9,20 @@ use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 
 function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
-    return array(
-      'moodle_course_list' => array(
-        'variables' => array('course_list' => array(),'moodle_user_id'=> ""),
-        'template' => 'course_list',
-          ),
-        'moodle_course' => array(
-            'variables' => array('course' => array(),'moodle_user_id'=> ""),
-            'template' => 'course',
-        ),
-        'moodle_course_activity' => array(
-          'variables' => array('course_activity' => array()),
-          'template' => 'course_activity',
-      ),
-    );
+  return [
+    'moodle_course_list' => [
+      'variables' =>['course_list' => [],'moodle_user_id'=> ""],
+      'template' => 'course_list',
+    ],
+    'moodle_course' => [
+        'variables' => ['course' => [],'moodle_user_id'=> ""],
+        'template' => 'course',
+    ],
+    'moodle_course_activity' => [
+      'variables' => ['course_activity' => [] ],
+      'template' => 'course_activity',
+    ],
+  ];
 }
 
 /**
@@ -35,26 +33,22 @@ function drupal_moodle_integration_install() {
   ->getStorage('entity_form_display')
   ->load('user.user.default')
   ->setComponent('field_moodle_user_id', [
-      'label' => 'above',
-      'settings' => ['link_to_entity' => 'false'],
-    ])->save();
-
-    $items = array(
-      'moodle/course/list' => 'Moodle Courses List',
-      'moodle/course' => 'Moodle User Assigned Courses',
-    );
-
-    foreach($items as $nid => $title) {
-
-       $menu_link = MenuLinkContent::create([
-        'title' => $title,
-        'link' => ['uri' => 'internal:/' . $nid],
-        'menu_name' => 'main',
-        'expanded' => TRUE,
-      ]);
-      $menu_link->save();
-
-    }
+    'label' => 'above',
+    'settings' => ['link_to_entity' => 'false'],
+  ])->save();
+  $items = array(
+    'moodle/course/list' => 'Moodle Courses List',
+    'moodle/course' => 'Moodle User Assigned Courses',
+  );
+  foreach($items as $nid => $title) {
+    $menu_link = MenuLinkContent::create([
+    'title' => $title,
+    'link' => ['uri' => 'internal:/' . $nid],
+    'menu_name' => 'main',
+    'expanded' => TRUE,
+    ]);
+    $menu_link->save();
+  }
 }
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -70,14 +64,12 @@ function drupal_moodle_integration_form_user_login_form_alter(&$form, FormStateI
  */
 function drupal_moodle_integration_user_login_submit(&$form, FormStateInterface $form_state) {
   $url = Url::fromRoute('drupal_moodle_integration_course.controller');
-
-  // Check if a destination was set, probably on an exception controller.
-  // @see \Drupal\user\Form\UserLoginForm::submitForm()
   $request = \Drupal::service('request_stack')->getCurrentRequest();
   if (!$request->request->has('destination')) {
     $form_state->setRedirectUrl($url);
   }
 }
+
 function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterface $entity) {
   if($entity->bundle()=='user') {
     $users = array(array(
@@ -95,16 +87,14 @@ function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterfac
 }
 
 function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterface $entity) {
-
   if($entity->bundle()=='user') {
-    $users = array(array(
+    $users[] =[
       'id' => $entity->get('field_moodle_user_id')->getValue()[0]['value'] ,
       'username' => $entity->get('name')->getValue()[0]['value'] ,
       'firstname'=> $entity->get('name')->getValue()[0]['value'],
       'lastname' => $entity->get('name')->getValue()[0]['value'],
       'email'    => $entity->get('mail')->getValue()[0]['value'],
-     // 'lang'     => $entity->get('default_langcode')->getValue()[0]['value'],
-      ));
+      ];
       $service = \Drupal::service('drupal_moodle_integration.user_services');
       $moodle_id= $service->moodleUpdateUser($users);
   }
