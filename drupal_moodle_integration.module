@@ -1,15 +1,16 @@
 <?php
+
 /**
- * 
+ * @file
+ * Defines Drupal Moodle Integration Functions.
  */
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 
 /**
- * Implements hook_theme().Set custom theme for modules
+ * Implements hook_theme().
  */
-
 function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
   return [
     'moodle_course_list' => [
@@ -28,7 +29,7 @@ function drupal_moodle_integration_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Implements hook_user_insert().Update existing users in moodle.
+ * Implements hook_user_insert().
  */
 function drupal_moodle_integration_install() {
   \Drupal::entityTypeManager()
