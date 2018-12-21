@@ -12,7 +12,6 @@ class MoodleSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-
   public function getFormId() {
     return 'moodle_admin_settings';
   }
@@ -58,11 +57,8 @@ class MoodleSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Retrieve the configuration
-    $this->configFactory->getEditable('moodle.settings')
-    ->set('url', $form_state->getValue('url'))
-    ->set('wstoken', $form_state->getValue('wstoken'))
-    ->save();
+    // Retrieve the configuration.
+    $this->configFactory->getEditable('moodle.settings')->set('url', $form_state->getValue('url'))->set('wstoken', $form_state->getValue('wstoken'))->save();
     parent::submitForm($form, $form_state);
   }
 
