@@ -3,7 +3,6 @@
 namespace Drupal\drupal_moodle_integration\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\drupal_moodle_integration\Utility;
 
 /**
  * Defines CourseController class.
@@ -16,7 +15,6 @@ class CourseController extends ControllerBase {
    * @return array
    *   Return markup array.
    */
-
   public function coursesList() {
     global $base_url;
     $service = \Drupal::service('drupal_moodle_integration.course_services');
@@ -26,12 +24,12 @@ class CourseController extends ControllerBase {
       '#theme' => 'moodle_course_list',
       '#course_list' => $service->getCoursesList(),
       '#moodle_user_id' => $moodle_id,
-      '#attached' => array(
-        'library' => array(
+      '#attached' => [
+        'library' => [
           'drupal_moodle_integration/drupal_moodle_integration',
-        )
-      )
-      ];
+        ]
+      ]
+    ];
   }
   public function userEnrolledCourse() {
     $service = \Drupal::service('drupal_moodle_integration.course_services');
@@ -55,7 +53,7 @@ class CourseController extends ControllerBase {
     $service = \Drupal::service('drupal_moodle_integration.course_services');
     return [
        	'#theme' => 'moodle_course_activity',
-        '#course_activity' => $service->getActivities($arg[4]), 
+        '#course_activity' => $service->getActivities($arg[4]),
     ];
   }
 
