@@ -15,8 +15,8 @@ class CourseService {
    */
 
   /**
-  * User Courses List.
-  */
+   * User Courses List.
+   */
   public function getCoursesList() {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -32,8 +32,8 @@ class CourseService {
   }
 
   /**
-  * User Assigned Courses.
-  */
+   * User Assigned Courses.
+   */
   public function userAssignedcourses() {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -52,8 +52,8 @@ class CourseService {
   }
 
   /**
-  * Get All list of Activities.
-  */
+   * Get All list of Activities.
+   */
   public function getActivities($courseid) {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -70,8 +70,8 @@ class CourseService {
   }
   
   /**
-  * Course Unenrol.
-  */
+   * Course Unenrol.
+   */
   public function courseUnEnrol($userid, $courseid) {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
