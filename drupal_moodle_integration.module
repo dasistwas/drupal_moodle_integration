@@ -106,6 +106,6 @@ function drupal_moodle_integration_user_update(EntityInterface $entity) {
       'email'    => $entity->get('mail')->getValue()[0]['value'],
     ];
     $service = \Drupal::service('drupal_moodle_integration.user_services');
-    $moodle_id = $service->moodleUpdateUser($users);
+    $service->moodleUpdateUser($users);
   }
 }

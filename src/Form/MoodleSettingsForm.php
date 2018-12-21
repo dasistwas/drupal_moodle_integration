@@ -4,6 +4,7 @@ namespace Drupal\drupal_moodle_integration\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Configure example settings for this site.
  */
@@ -29,7 +30,6 @@ class MoodleSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('moodle.settings');
 
     $form['moodle'] = [
       '#title' => 'Moodle settings',
