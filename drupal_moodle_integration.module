@@ -5,6 +5,7 @@
  * Defines Drupal Moodle Integration Functions.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
@@ -76,7 +77,7 @@ function drupal_moodle_integration_user_login_submit(&$form, FormStateInterface 
 /**
  * Insert User in moodle.
  */
-function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterface $entity) {
+function drupal_moodle_integration_user_insert(EntityInterface $entity) {
   if ($entity->bundle() == 'user') {
     $users[] = [
       'username' => $entity->get('name')->getValue()[0]['value'] ,
@@ -95,7 +96,7 @@ function drupal_moodle_integration_user_insert(Drupal\Core\Entity\EntityInterfac
 /**
  * Update User in moodle.
  */
-function drupal_moodle_integration_user_update(Drupal\Core\Entity\EntityInterface $entity) {
+function drupal_moodle_integration_user_update(EntityInterface $entity) {
   if ($entity->bundle() == 'user') {
     $users[] = [
       'id' => $entity->get('field_moodle_user_id')->getValue()[0]['value'] ,

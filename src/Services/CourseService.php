@@ -68,7 +68,7 @@ class CourseService {
     $newusers = json_decode($response);
     return $newusers;
   }
-  
+
   /**
    * Course Unenrol.
    */
