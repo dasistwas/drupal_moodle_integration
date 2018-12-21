@@ -2,7 +2,7 @@
 
 namespace Drupal\drupal_moodle_integration\Services;
 
-use \Drupal\user\Entity\User;
+use Drupal\user\Entity\User;
 
 /**
  * Class CustomService.
@@ -15,8 +15,8 @@ class CourseService {
    */
 
   /**
-    * User Courses List.
-    */
+  * User Courses List.
+  */
   public function getCoursesList() {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -32,8 +32,8 @@ class CourseService {
   }
 
   /**
-    * User Assigned Courses.
-    */
+  * User Assigned Courses.
+  */
   public function userAssignedcourses() {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -52,8 +52,8 @@ class CourseService {
   }
 
   /**
-    * Get All list of Activities.
-    */
+  * Get All list of Activities.
+  */
   public function getActivities($courseid) {
     $config = \Drupal::config('moodle.settings');
     $baseurl = $config->get('url') . '/webservice/rest/server.php?';
@@ -70,11 +70,11 @@ class CourseService {
   }
   
   /**
-    * Course Unenrol.
-    */
+  * Course Unenrol.
+  */
   public function courseUnEnrol($userid, $courseid) {
     $config = \Drupal::config('moodle.settings');
-    $baseurl = $config->get('url').'/webservice/rest/server.php?';
+    $baseurl = $config->get('url') . '/webservice/rest/server.php?';
     $params = [
       'wstoken' => 'a5f4f1801d6268ad29b11ffcb51942d9',
       'wsfunction' => 'enrol_manual_unenrol_users',
