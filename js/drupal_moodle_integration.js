@@ -6,7 +6,6 @@
               event.preventDefault();
               var moodle_user_id = $(this).attr('moodle-user-id');
               var course_id = $(this).attr('course-id');
-              <?php echo json_encode(base_url()); ?>;
               $.ajax({
                 url: '/course/unenrol/'+moodle_user_id+'/'+course_id,
                 type: 'POST',
