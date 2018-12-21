@@ -8,7 +8,12 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure example settings for this site.
  */
+<<<<<<< HEAD
 class MoodleSettingsForm extends ConfigFormBase {
+=======
+class MoodleSettingsForm extends ConfigFormBase
+{
+>>>>>>> 1d370edf738a9df3e89863a6b634c18b3c3a10d9
     /**
      * {@inheritdoc}
      */
@@ -55,6 +60,19 @@ class MoodleSettingsForm extends ConfigFormBase {
         ];
         return parent::buildForm($form, $form_state);
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * {@inheritdoc}
+     */
+    public function submitForm(array &$form, FormStateInterface $form_state)
+    {
+        // Retrieve the configuration.
+        $this->configFactory->getEditable('moodle.settings')->set('url', $form_state->getValue('url'))->set('wstoken', $form_state->getValue('wstoken'))->save();
+        parent::submitForm($form, $form_state);
+    }
+>>>>>>> 1d370edf738a9df3e89863a6b634c18b3c3a10d9
 
     /**
      * {@inheritdoc}
