@@ -18,8 +18,6 @@ class CourseController extends ControllerBase {
    *   Return markup array.
    */
   public function coursesList() {
-    global $base_url;
-
     $user = User::load(\Drupal::currentUser()->id());
     $moodle_id = $user->field_moodle_user_id->value;
     return [
@@ -38,7 +36,6 @@ class CourseController extends ControllerBase {
    * Functoin to enroll course.
    */
   public function userEnrolledCourse() {
-    $service = \Drupal::service('drupal_moodle_integration.course_services');
     $user = User::load(\Drupal::currentUser()->id());
     return [
       '#theme' => 'moodle_course',
@@ -70,7 +67,6 @@ class CourseController extends ControllerBase {
   public function courseUnenrol() {
     $path = \Drupal::request()->getpathInfo();
     $arg = explode('/', $path);
-    $service = \Drupal::service('drupal_moodle_integration.course_services');
     CourseService::courseUnEnrol($arg[4], $arg[5]);
   }
 
