@@ -12,13 +12,6 @@ drupal_moodle_integration_course.controller:
     _title: 'Courses List'
   requirements:
     _permission: 'access content'
-drupal_moodle_integration_course_activities.controller:
-  path: '/moodle/course/activities/{courseid}'
-  defaults:
-    _controller: '\Drupal\drupal_moodle_integration\Controller\CourseController::courseGetActivities'
-    _title: 'Activities'
-  requirements:
-    _permission: 'access content'
 drupal_moodle_integration_course_unenrol.controller:
   path: '/moodle/course/unenrol/{userid}/{courseid}'
   defaults:

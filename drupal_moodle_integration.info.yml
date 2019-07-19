@@ -1,4 +1,4 @@
-name: Moodle Intergartion
+name: Moodle Integration
 type: module
 description: 'Modules Provides Easy way to integarte with Druapl'
 package: 'Moodle Integration'
